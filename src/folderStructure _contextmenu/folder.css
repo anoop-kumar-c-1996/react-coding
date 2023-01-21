@@ -1,0 +1,9 @@
+span {
+  font-size: 20px;
+  cursor: pointer;
+  color: brown;
+}
+.cus_span {
+  font-size: 15px;
+  padding-left: 30px;
+}
