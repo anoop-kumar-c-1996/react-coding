@@ -1,12 +1,53 @@
 import React, { useState } from "react";
+import { Dropdown, Menu } from "antd";
 
-function Folder({ data, handleInsertNode }) {
+function Folder({ data, handleInsertNode, handleRemoveNode }) {
   const [expand, setExpand] = useState(false);
   const [isInput, setIsInput] = useState({
     visible: false,
     isFolder: null,
   });
-
+  /*********************** */
+  const handleContextMenuClick = (key) => {
+    if (key == "addFolder") {
+      handleInputClick(true);
+    } else if (key === "addFile") {
+      handleInputClick(false);
+    } else {
+      handleRemoveNode(data.id);
+    }
+  };
+  const menu = (
+    <Menu
+      onClick={({ key }) => handleContextMenuClick(key)}
+      items={[
+        {
+          label: "📁 add folder",
+          key: "addFolder",
+        },
+        {
+          label: "📄 add file",
+          key: "addFile",
+        },
+        {
+          label: "❌ Remove Folder",
+          key: "remove",
+        },
+      ]}
+    ></Menu>
+  );
+  const menuOne = (
+    <Menu
+      onClick={({ key }) => handleContextMenuClick(key)}
+      items={[
+        {
+          label: "❌ Remove file",
+          key: "remove",
+        },
+      ]}
+    ></Menu>
+  );
+  /********************** */
   const handleInputClick = (isFolder) => {
     setIsInput({
       visible: true,
@@ -43,18 +84,15 @@ function Folder({ data, handleInsertNode }) {
       {data.isFolder && (
         <div>
           <div>
-            <span
-              onClick={(e) => handleFolderClick(e)}
-              onContextMenu={(e) => handleFolderClick(e)}
-            >
-              📁{data.name}
-            </span>
-            <span className="cus_span">
+            <Dropdown overlay={menu} trigger={["contextMenu"]}>
+              <span onClick={(e) => handleFolderClick(e)}>📁{data.name}</span>
+              {/* <span className="cus_span">
               <button onClick={() => handleInputClick(true)}>folder +</button>
             </span>
             <span>
               <button onClick={() => handleInputClick(false)}>file +</button>
-            </span>
+            </span> */}
+            </Dropdown>
           </div>
           <div style={{ display: expand ? "block" : "none", paddingLeft: 25 }}>
             {isInput.visible && (
@@ -69,14 +107,20 @@ function Folder({ data, handleInsertNode }) {
               </div>
             )}
             {data.items.map((item) => (
-              <Folder data={item} handleInsertNode={handleInsertNode} />
+              <Folder
+                data={item}
+                handleInsertNode={handleInsertNode}
+                handleRemoveNode={handleRemoveNode}
+              />
             ))}
           </div>
         </div>
       )}
       {!data.isFolder && (
         <div>
-          <span>📄{data.name}</span>
+          <Dropdown overlay={menuOne} trigger={["contextMenu"]}>
+            <span>📄{data.name}</span>
+          </Dropdown>
         </div>
       )}
     </div>

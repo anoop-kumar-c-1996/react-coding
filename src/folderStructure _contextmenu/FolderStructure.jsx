@@ -10,14 +10,21 @@ function FolderStructureOne() {
   const { insertNode } = useTraversTree();
 
   const handleInsertNode = (folderId, name, isFolder) => {
-    console.log(folderId, name, isFolder);
     const traversedTree = insertNode(data, folderId, name, isFolder);
     setData(traversedTree);
   };
 
+  const handleRemoveNode = (folderId) => {
+    console.log(folderId);
+  };
+
   return (
     <>
-      <Folder data={data} handleInsertNode={handleInsertNode} />
+      <Folder
+        data={data}
+        handleInsertNode={handleInsertNode}
+        handleRemoveNode={handleRemoveNode}
+      />
     </>
   );
 }
